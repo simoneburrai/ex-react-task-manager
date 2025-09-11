@@ -2,11 +2,11 @@ import { Route, Routes, BrowserRouter } from "react-router-dom"
 import AddTask from "./pages/TaskList copy"
 import TaskList from "./pages/TaskList"
 import DefaultComponent from "./components/DefaultComponent"
+import { TaskContextProvider } from "./pages/ApiContext"
 
 function App() {
-
-
-  return <BrowserRouter>
+  return <TaskContextProvider>
+  <BrowserRouter>
     <Routes>
       <Route path="/" element={<DefaultComponent/>}>
         <Route path="/tasks" element={<TaskList/>}/>
@@ -14,6 +14,7 @@ function App() {
       </Route>
     </Routes>
   </BrowserRouter>
+</TaskContextProvider>
 }
 
 export default App
