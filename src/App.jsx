@@ -1,8 +1,8 @@
 import { Route, Routes, BrowserRouter } from "react-router-dom"
-import AddTask from "./pages/TaskList copy"
+import AddTask from "./pages/AddTask"
 import TaskList from "./pages/TaskList"
 import DefaultComponent from "./components/DefaultComponent"
-import { TaskContextProvider } from "./pages/ApiContext"
+import { TaskContextProvider } from "./contexts/ApiContext"
 
 function App() {
   return <TaskContextProvider>
