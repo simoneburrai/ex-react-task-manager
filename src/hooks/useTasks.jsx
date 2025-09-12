@@ -9,7 +9,7 @@ export default function useTasks(){
         useEffect(() => {
         const fetchTasks = async () => {
           try {
-            const response = await fetch(`${apiUrl}`);
+            const response = await fetch(apiUrl);
             const data = await response.json();
             
             console.log("Dati recuperati dall'API:", data);
@@ -24,7 +24,35 @@ export default function useTasks(){
       }, []);
     
 
-    const addTask = ()=>{}
+    const addTask = async(formData)=>{
+
+      try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+          if(response.ok){
+          if(result.success){
+            console.log(result);
+            setTasks(prev=>[...prev, result.task]);
+          } else {
+            throw new Error("Problema nell'inserimento della Task");
+          }
+        } else {
+            const errorData = result.message || `Errore HTTP: ${response.status}`;
+            throw new Error(errorData);
+        }
+      } catch (error) {
+        console.error("Errore nella chiamata API:", error);
+        throw error;
+      }
+}
     const removeTask = ()=>{}
     const updateTask = ()=>{}
 

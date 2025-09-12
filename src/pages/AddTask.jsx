@@ -1,13 +1,15 @@
 import { useState, useRef } from "react";
+import useTasks from "../hooks/useTasks";
 
 export default function AddTask (){
 
+    const {addTask} = useTasks();
     const [title, setTitle] = useState("");
     const [titleError, setTitleError] = useState("");
     const descriptionRef = useRef(null);
     const statusRef = useRef(null);
 
-    const onSumbit= (e)=> {
+    const onSumbit= async(e)=> {
          e.preventDefault();
 
         const symbolsArray = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}', '|', ';', ':', "'", '"', ',', '.', '<', '>', '?', '/', '`', '~'];
@@ -19,15 +21,26 @@ export default function AddTask (){
             return;
         }
 
-
-       
-
         const formData = {
             title: title,
             description: descriptionRef.current.value,
             status: statusRef.current.value
         };
         console.log(formData);
+// Se la funzione esegue correttamente l'operazione:
+// Mostrare un alert di conferma dell’avvenuta creazione della task.
+// Resettare il form.
+// Se la funzione lancia un errore:
+// Mostrare un alert con il messaggio di errore ricevuto.
+        try {
+            await addTask(formData); 
+            alert("Task aggiunta con successo!");
+            setTitle("");
+            descriptionRef.current.value = null
+        } catch (error) {
+            console.error("Errore durante l'aggiunta della task:", error.message);
+            alert(error.message)
+        }
         setTitleError("");
     }
     
@@ -43,7 +56,7 @@ export default function AddTask (){
         <div>
             <label className="form-label" htmlFor="status">Status:</label>
             <select ref={statusRef} className="form-control" name="status" id="status">
-                <option value="To Do" >To Do</option>
+                <option value="To do" >To Do</option>
                 <option value="Doing">Doing</option>
                 <option value="Done">Done</option>
             </select>
