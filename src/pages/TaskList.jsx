@@ -1,8 +1,8 @@
 import TaskRow from "../components/TaskRow";
-import { useTasks } from "../contexts/ApiContext"
+import { useTaskApi} from "../contexts/ApiContext"
 
 export default function TaskList (){
-    const {tasks} = useTasks();
+    const {tasks, updateTask, removeTask, addTask} = useTaskApi();
     console.log(tasks);
 
     return <div>
