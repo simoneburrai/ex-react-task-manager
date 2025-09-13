@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
-import useTasks from "../hooks/useTasks";
+import { useTaskApi } from "../contexts/ApiContext";
 
 export default function AddTask (){
 
-    const {addTask} = useTasks();
+    const {addTask} = useTaskApi();
     const [title, setTitle] = useState("");
     const [titleError, setTitleError] = useState("");
     const descriptionRef = useRef(null);

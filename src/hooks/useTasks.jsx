@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function useTasks(){
 
     const [tasks, setTasks] = useState([]);
     const apiUrl = "http://localhost:3001/tasks"
 
-    
-        useEffect(() => {
-        const fetchTasks = async () => {
+    const fetchTasks = useCallback(async () => {
           try {
             const response = await fetch(apiUrl);
             const data = await response.json();
@@ -18,10 +16,11 @@ export default function useTasks(){
           } catch (error) {
             console.error("Errore nel recupero dei dati:", error);
           }
-        };
-    
+    }, [apiUrl]);
+
+    useEffect(() => {
         fetchTasks();
-      }, []);
+    }, [fetchTasks]);
     
 
     const addTask = async(formData)=>{
@@ -40,7 +39,7 @@ export default function useTasks(){
           if(response.ok){
           if(result.success){
             console.log(result);
-            setTasks(prev=>[...prev, result.task]);
+            setTasks(prev=>[...prev, result.task])
           } else {
             throw new Error("Problema nell'inserimento della Task");
           }
@@ -53,7 +52,29 @@ export default function useTasks(){
         throw error;
       }
 }
-    const removeTask = ()=>{}
+    const removeTask = async(taskId)=>{
+
+      try {
+        const response = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+          method: "DELETE"
+        })
+
+        const parsedResponse = await response.json();
+
+        console.log(parsedResponse);
+        
+        if(parsedResponse.success){
+          console.log("Task Eliminata con successo")
+          setTasks(prevTasks =>{
+            return prevTasks.filter(task=> Number(task.id) !== Number(taskId));
+          });
+        }else{
+          throw new Error(parsedResponse.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
     const updateTask = ()=>{}
 
     return {addTask, removeTask, updateTask, tasks};

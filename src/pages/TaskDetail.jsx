@@ -1,10 +1,16 @@
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react";
+import { useTaskApi } from "../contexts/ApiContext";
+import { useNavigate } from "react-router-dom";
 
 export default function TaskDetail(){
 
-    let {id} = useParams()
+    const navigate = useNavigate();
+        let {id} = useParams()
     id = parseInt(id);
+
+    const {removeTask} = useTaskApi()
+
     const [task, setTask] = useState(null);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("");
@@ -30,10 +36,15 @@ export default function TaskDetail(){
         }
     }
 
-
-    const removeTask = (id)=> {
-        console.log(`Task n.${id} rimossa con successo`)
+    const handleDelete = async () => {
+    try {
+      await removeTask(id);
+      alert("Task eliminata con successo!");
+      navigate(-1)
+    } catch (err) {
+      alert(`Errore durante l'eliminazione: ${err.message}`);
     }
+  };
 
     useEffect(()=>{
         fetchTask();
@@ -47,7 +58,7 @@ export default function TaskDetail(){
         <div><strong>Descrizione: {task.description}</strong></div>
         <div><strong>Stato: {task.status}</strong></div>
         <div><strong>Data di Creazione: {task.createdAt} </strong></div>
-        <button onClick={()=>removeTask(id)}>Elimina Task</button>
+        <button onClick={handleDelete}>Elimina Task</button>
     </div>}
     </>
 
