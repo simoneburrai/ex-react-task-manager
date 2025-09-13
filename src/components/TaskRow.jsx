@@ -1,7 +1,8 @@
 import { memo } from "react";
+import { Link } from "react-router-dom";
 
 export default memo(function TaskRow ({task}){
-    const {status, createdAt, title} = task;
+    const {status, createdAt, title, id} = task;
     const dateObject = new Date(createdAt);
     const formattedDate = dateObject.toLocaleDateString('it-IT');
 
@@ -19,7 +20,7 @@ export default memo(function TaskRow ({task}){
     }
 
     return <tr className="row "> 
-        <td className={`col text-light ${currentColor}`}>{title}</td>
+        <td className={`col text-light ${currentColor}`}><Link task = {task} className="text-decoration-none text-white" to={`/tasks/${id}`}>{title}</Link></td>
         <td className={`col text-light ${currentColor}`}>{status}</td>
         <td className={`col text-light ${currentColor}`}>{formattedDate}</td>
     </tr>
