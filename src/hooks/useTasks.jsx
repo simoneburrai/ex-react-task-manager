@@ -75,7 +75,42 @@ export default function useTasks(){
         console.log(error);
       }
     }
-    const updateTask = ()=>{}
+    const updateTask = async(updatedTask)=>{
+
+      try {
+        const response = await fetch(`${apiUrl}/${updatedTask.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTask),
+        });
+        const parsedResponse = await response.json();
+        if(response.ok){
+            if(parsedResponse.success){
+              console.log("La task è stata aggiornata con successo");
+              setTasks(prev=>{
+                const updatedTasks = prev.map(task=> {
+                  if(Number(task.id)===Number(updatedTask.id)){
+                    return updatedTask
+                  }else{
+                    return task
+                  }
+                } );
+                return updatedTasks;
+              })
+            }else{
+              throw new Error(parsedResponse.message)
+            }
+        }else{
+          throw new Error("Errore nella chiamata di modifica API")
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      
+
+    }
 
     return {addTask, removeTask, updateTask, tasks};
 }

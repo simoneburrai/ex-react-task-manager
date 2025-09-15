@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useTaskApi } from "../contexts/ApiContext";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
+import EditTaskModal from "../components/EditTaskModal";
 
 export default function TaskDetail(){
 
@@ -10,13 +11,15 @@ export default function TaskDetail(){
         let {id} = useParams()
     id = parseInt(id);
 
-    const {removeTask} = useTaskApi()
+    const {removeTask, updateTask} = useTaskApi()
 
     const [task, setTask] = useState(null);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("");
-    const [show, setShow] = useState(false);
-    const onClose = ()=>setShow(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [showModify, setShowModify] = useState(false)
+    const onCloseDelete = ()=>setShowDelete(false);
+    const onCloseModify = ()=>setShowModify(false);
 
     const fetchTask = async()=>{
         try {
@@ -49,6 +52,15 @@ export default function TaskDetail(){
     }
   };
 
+    const onSave= (task)=>{
+        try {
+            updateTask(task);
+            alert("Modifica avvenuta con successo")
+        } catch (error) {
+            alert(error);
+        }
+    }
+
     useEffect(()=>{
         fetchTask();
     }, [id])
@@ -61,8 +73,11 @@ export default function TaskDetail(){
         <div><strong>Descrizione: {task.description}</strong></div>
         <div><strong>Stato: {task.status}</strong></div>
         <div><strong>Data di Creazione: {task.createdAt} </strong></div>
-        <button onClick={()=>setShow(true)}>Elimina Task</button>
-        <Modal onClose={onClose} show={show} title={task.title} content={task.description} onConfirm={onConfirm} />
+        <button onClick={()=>setShowDelete(true)}>Elimina Task</button>
+        <button onClick={()=>setShowModify(true)}>ModificaTask</button>
+        <EditTaskModal show={showModify} onClose={onCloseModify} task={task} onSave={onSave}/>
+        <Modal onClose={onCloseDelete
+        } show={showDelete} title={task.title} content={task.description} onConfirm={onConfirm} />
     </div>}
     </>
 

@@ -10,7 +10,7 @@ export default function Modal(props){
     const modalContent = <div className="modal-overlay">
     <div className="modal-content">
         <h3>{title}</h3>
-        <p>{content}</p>
+        {content}
         <div>
             <button onClick={onClose}>Annulla</button>
             <button onClick={onConfirm}>Conferma</button>
