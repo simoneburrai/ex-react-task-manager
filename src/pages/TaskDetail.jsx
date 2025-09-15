@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react";
 import { useTaskApi } from "../contexts/ApiContext";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal";
 
 export default function TaskDetail(){
 
@@ -14,6 +15,8 @@ export default function TaskDetail(){
     const [task, setTask] = useState(null);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("");
+    const [show, setShow] = useState(false);
+    const onClose = ()=>setShow(false);
 
     const fetchTask = async()=>{
         try {
@@ -36,7 +39,7 @@ export default function TaskDetail(){
         }
     }
 
-    const handleDelete = async () => {
+    const onConfirm = async () => {
     try {
       await removeTask(id);
       alert("Task eliminata con successo!");
@@ -58,7 +61,8 @@ export default function TaskDetail(){
         <div><strong>Descrizione: {task.description}</strong></div>
         <div><strong>Stato: {task.status}</strong></div>
         <div><strong>Data di Creazione: {task.createdAt} </strong></div>
-        <button onClick={handleDelete}>Elimina Task</button>
+        <button onClick={()=>setShow(true)}>Elimina Task</button>
+        <Modal onClose={onClose} show={show} title={task.title} content={task.description} onConfirm={onConfirm} />
     </div>}
     </>
 
