@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import TaskRow from "../components/TaskRow";
 import { useTaskApi} from "../contexts/ApiContext"
+import { useCallback, useRef } from "react";
+let timeOutTime = null;
 
 export default function TaskList (){
     const {tasks, updateTask, removeTask, addTask} = useTaskApi();
     const [sortBy, setSortBy] = useState("createdAt");
     const [sortOrder, setSortOrder] = useState(1);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const orderedTask = useMemo(()=>{
         const titleOrdered = tasks.toSorted((a, b)=>a.title.localeCompare(b.title));
@@ -32,8 +35,23 @@ export default function TaskList (){
             return sortOrder > 0 ? currentTasks : currentTasks.reverse();
         }
 
-        return currentTaskOrdered();
-    }, [tasks, sortBy, sortOrder])
+        const filteredTasksQuery = ()=>{
+            const currentTasks = currentTaskOrdered();
+            if(searchQuery){
+                return currentTasks.filter(task=>{
+                const taskTitle = task.title.toLowerCase();
+                const taskStatus = task.status.toLowerCase();
+                return taskTitle.includes(searchQuery.toLocaleLowerCase()) ||
+                taskStatus.includes(searchQuery.toLocaleLowerCase());
+            })
+            }else{
+                return currentTasks;
+            }
+            
+        }
+
+        return filteredTasksQuery();
+    }, [tasks, sortBy, sortOrder, searchQuery])
 
     const handleSorting = (e)=>{
         
@@ -55,6 +73,28 @@ export default function TaskList (){
         }
     }
 
+
+    function useDebounce(callback, delay) {
+        
+
+        const debouncedFun = useCallback((...args) => {
+            if (timeOutTime) {
+            clearTimeout(timeOutTime);
+            }
+
+            timeOutTime = setTimeout(() => {
+            callback(...args);
+            }, delay);
+        }, [callback, delay]);
+
+        return debouncedFun;
+    }
+
+
+    const handleSearch = useDebounce((value) => {
+        setSearchQuery(value); 
+    }, 500);
+
    
     console.log(tasks);
     console.log("sort order", sortOrder);
@@ -62,6 +102,10 @@ export default function TaskList (){
 
     return <div>
         <h1>Task List</h1>
+        <label>
+            <span>Ricerca Task: </span>
+            <input type="text" placeholder="Search..."  onChange={e=>handleSearch(e.target.value)}/>
+        </label>
 
         <table className="table">
             <thead>
@@ -80,3 +124,6 @@ export default function TaskList (){
         </table>
     </div>
 };
+
+
+
