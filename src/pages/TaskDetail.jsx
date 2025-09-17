@@ -4,6 +4,7 @@ import { useTaskApi } from "../contexts/ApiContext";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import EditTaskModal from "../components/EditTaskModal";
+const {VITE_API_TASK_URL} = import.meta.env;
 
 export default function TaskDetail(){
 
@@ -24,7 +25,7 @@ export default function TaskDetail(){
     const fetchTask = async()=>{
         try {
             setLoading(true)
-            const response = await fetch(`http://localhost:3001/tasks/`);
+            const response = await fetch(`${VITE_API_TASK_URL}/tasks`);
             const data = await response.json()
             if(response.ok){
                 const currentTask = data.find(task=> task.id === id);

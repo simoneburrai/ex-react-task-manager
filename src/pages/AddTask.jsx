@@ -27,11 +27,7 @@ export default function AddTask (){
             status: statusRef.current.value
         };
         console.log(formData);
-// Se la funzione esegue correttamente l'operazione:
-// Mostrare un alert di conferma dell’avvenuta creazione della task.
-// Resettare il form.
-// Se la funzione lancia un errore:
-// Mostrare un alert con il messaggio di errore ricevuto.
+
         try {
             await addTask(formData); 
             alert("Task aggiunta con successo!");

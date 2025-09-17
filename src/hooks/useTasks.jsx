@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+const {VITE_API_TASK_URL} = import.meta.env;
 
 export default function useTasks(){
 
     const [tasks, setTasks] = useState([]);
-    const apiUrl = "http://localhost:3001/tasks"
+    const apiUrl = `${VITE_API_TASK_URL}/tasks`
 
     const fetchTasks = useCallback(async () => {
           try {
