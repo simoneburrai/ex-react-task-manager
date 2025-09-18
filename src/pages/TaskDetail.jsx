@@ -74,8 +74,8 @@ export default function TaskDetail(){
         <div><strong>Descrizione: {task.description}</strong></div>
         <div><strong>Stato: {task.status}</strong></div>
         <div><strong>Data di Creazione: {task.createdAt} </strong></div>
-        <button onClick={()=>setShowDelete(true)}>Elimina Task</button>
-        <button onClick={()=>setShowModify(true)}>ModificaTask</button>
+        <button className="btn btn-danger" onClick={()=>setShowDelete(true)}>Elimina Task</button>
+        <button className="btn btn-warning" onClick={()=>setShowModify(true)}>ModificaTask</button>
         <EditTaskModal show={showModify} onClose={onCloseModify} task={task} onSave={onSave}/>
         <Modal onClose={onCloseDelete
         } show={showDelete} title={task.title} content={task.description} onConfirm={onConfirm} />

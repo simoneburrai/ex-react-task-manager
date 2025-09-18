@@ -21,8 +21,8 @@ export default memo(function TaskRow ({task}){
     }
 
     return <tr className="row "> 
-        <td className={`col text-light ${currentColor}`}><Link task = {task} className="text-decoration-none text-white" to={`/tasks/${id}`}>{title}</Link></td>
+        <td className="col"><Link task = {task} className="text-decoration-none text-black" to={`/tasks/${id}`}>{title}</Link></td>
         <td className={`col text-light ${currentColor}`}>{status}</td>
-        <td className={`col text-light ${currentColor}`}>{formattedDate}</td>
+        <td className="col">{formattedDate}</td>
     </tr>
 })

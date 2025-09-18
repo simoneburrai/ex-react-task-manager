@@ -58,7 +58,7 @@ const FormContent = ()=>{
 
 
     return <>
-    <Modal show={show} title={"Modifica Task"} content={<FormContent/>} onConfirm={()=>editFormRef.current.requestSubmit()}/>
+    <Modal onClose={onClose} show={show} title={"Modifica Task"} content={<FormContent/>} onConfirm={()=>editFormRef.current.requestSubmit()}/>
     </>
 }
 

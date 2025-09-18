@@ -7,10 +7,10 @@ const TaskContext = createContext();
 
 const TaskContextProvider = ({children})=> {
 
-  const {tasks, addTask, updateTask, removeTask} = useTasks();
+  const taskData = useTasks();
 
   return (
-    <TaskContext.Provider value={{tasks, addTask, updateTask, removeTask}}>
+    <TaskContext.Provider value={{...taskData}}>
       {children}
     </TaskContext.Provider>
   );

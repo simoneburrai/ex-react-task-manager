@@ -56,7 +56,7 @@ export default function useTasks(){
     const removeTask = async(taskId)=>{
 
       try {
-        const response = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+        const response = await fetch(`${apiUrl}/${taskId}`, {
           method: "DELETE"
         })
 
